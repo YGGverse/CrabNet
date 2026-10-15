@@ -597,17 +597,17 @@ bool SystemAddress::FromString(const char *str, char portDelineator, int ipVersi
 #if CRABNET_SUPPORT_IPV6 == 1
     if (servinfo->ai_family == AF_INET)
     {
-//         if (ipVersion==6)
-//         {
-//            address.addr4.sin_family=AF_INET6;
-//             memset(&address.addr6,0,sizeof(address.addr6));
-//             memcpy(address.addr6.sin6_addr.s6_addr+12,&((struct sockaddr_in *)servinfo->ai_addr)->sin_addr.s_addr,sizeof(unsigned long));
-//         }
-//         else
-//         {
+         if (ipVersion==6)
+         {
+            address.addr4.sin_family=AF_INET6;
+             memset(&address.addr6,0,sizeof(address.addr6));
+             memcpy(address.addr6.sin6_addr.s6_addr+12,&((struct sockaddr_in *)servinfo->ai_addr)->sin_addr.s_addr,sizeof(unsigned long));
+         }
+         else
+         {
         address.addr4.sin_family = AF_INET;
         memcpy(&address.addr4, (struct sockaddr_in *) servinfo->ai_addr, sizeof(struct sockaddr_in));
-//        }
+        }
     }
     else
     {
