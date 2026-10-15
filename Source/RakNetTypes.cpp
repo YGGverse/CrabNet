@@ -39,6 +39,7 @@
 #include "SocketLayer.h"
 #include "SuperFastHash.h"
 #include <cstdlib>
+#include <string>
 
 using namespace RakNet;
 
