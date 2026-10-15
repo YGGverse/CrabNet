@@ -146,7 +146,7 @@ struct RAK_DLL_EXPORT SocketDescriptor
     unsigned short port;
 
     /// The local network card address to bind to, such as "127.0.0.1".  Pass an empty string to use INADDR_ANY.
-    char hostAddress[32];
+    char hostAddress[128]; // allow long IPv6 addresses instead of IPv4 & current ::/::1 values
 
     /// IP version: For IPV4, use AF_INET (default). For IPV6, use AF_INET6. To autoselect, use AF_UNSPEC.
     /// IPV6 is the newer internet protocol. Instead of addresses such as natpunch.jenkinssoftware.com, you may have an address such as fe80::7c:31f7:fec4:27de%14.
