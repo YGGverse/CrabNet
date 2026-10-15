@@ -121,7 +121,7 @@
 #endif
 
 #ifndef CRABNET_SUPPORT_IPV6
-#define CRABNET_SUPPORT_IPV6 0
+#define CRABNET_SUPPORT_IPV6 1
 #endif
 
 #ifndef RAKSTRING_TYPE
