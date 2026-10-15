@@ -3230,7 +3230,8 @@ RakPeer::SendConnectionRequest(const char *host, unsigned short remotePort, cons
     RakAssert(passwordDataLength <= 256);
     RakAssert(remotePort != 0);
     SystemAddress systemAddress;
-    if (!systemAddress.FromStringExplicitPort(host, remotePort, socketList[connectionSocketIndex]->GetBoundAddress().GetIPVersion()))
+    if (!systemAddress.FromStringExplicitPort(host, remotePort, socketList[connectionSocketIndex]->GetBoundAddress().GetIPVersion())
+        && !systemAddress.FromStringExplicitPort(host, remotePort, 0))
         return CANNOT_RESOLVE_DOMAIN_NAME;
 
     // Already connected?
