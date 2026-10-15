@@ -97,7 +97,7 @@ SocketDescriptor::SocketDescriptor()
     hostAddress[0] = 0;
     remotePortRakNetWasStartedOn_PS3_PSP2 = 0;
     extraSocketOptions = 0;
-    socketFamily = AF_INET;
+    socketFamily = AF_INET6; // @TODO
 }
 
 SocketDescriptor::SocketDescriptor(unsigned short _port, const char *_hostAddress)
