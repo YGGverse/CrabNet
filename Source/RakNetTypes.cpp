@@ -115,7 +115,14 @@ SocketDescriptor::SocketDescriptor(unsigned short _port, const char *_hostAddres
     else
         hostAddress[0] = 0;
     extraSocketOptions = 0;
-    socketFamily = AF_INET;
+    if (_hostAddress && strchr(_hostAddress, ':'))
+    {
+        socketFamily = AF_INET6;
+    }
+    else
+    {
+        socketFamily = AF_INET;
+    }
 }
 
 // Defaults to not in peer to peer mode for NetworkIDs.  This only sends the localSystemAddress portion in the BitStream class
