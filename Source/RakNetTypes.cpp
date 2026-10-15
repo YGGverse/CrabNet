@@ -431,29 +431,37 @@ bool SystemAddress::IsLANAddress()
 #endif
 }
 
+// IPv6 only @TODO
 bool SystemAddress::SetBinaryAddress(const char *str, char portDelineator)
 {
     if (NonNumericHostString(str))
     {
-
 #if defined(_WIN32)
-        if (_strnicmp(str,"localhost", 9)==0)
+        if (_strnicmp(str, "localhost", 9) == 0)
 #else
         if (strncasecmp(str, "localhost", 9) == 0)
 #endif
         {
-            address.addr4.sin_addr.s_addr = inet_addr__("127.0.0.1"); // @TODO ::1?
+            inet_pton(AF_INET6, "::1", &address.addr6.sin6_addr);
+            address.addr6.sin6_family = AF_INET6;
 
-            if (str[9])
-                SetPortHostOrder((unsigned short) atoi(str + 9));
+            if (str[9] && str[9] == portDelineator)
+                SetPortHostOrder((unsigned short)atoi(str + 10));
+
             return true;
         }
 
-        //const char *ip = ( char* ) SocketLayer::DomainNameToIP( str );
         char ip[65];
         RakNetSocket2::DomainNameToIP(str, ip);
         if (ip[0])
-            address.addr4.sin_addr.s_addr = inet_addr__(ip);
+        {
+            if (inet_pton(AF_INET6, ip, &address.addr6.sin6_addr) <= 0)
+            {
+                *this = UNASSIGNED_SYSTEM_ADDRESS;
+                return false;
+            }
+            address.addr6.sin6_family = AF_INET6;
+        }
         else
         {
             *this = UNASSIGNED_SYSTEM_ADDRESS;
@@ -462,44 +470,51 @@ bool SystemAddress::SetBinaryAddress(const char *str, char portDelineator)
     }
     else
     {
-        // Split the string into the first part, and the : part
-        int index;
-        char IPPart[22];
-        char portPart[10];
-        // Only write the valid parts, don't change existing if invalid
-        //    binaryAddress=UNASSIGNED_SYSTEM_ADDRESS.binaryAddress;
-        //    port=UNASSIGNED_SYSTEM_ADDRESS.port;
-        for (index = 0; str[index] && str[index] != portDelineator && index < 22; index++)
+        std::string ipStr(str);
+        std::string portStr = "";
+
+        if (portDelineator == ':')
         {
-            if (str[index] != '.' && (str[index] < '0' || str[index] > '9'))
-                break;
-            IPPart[index] = str[index];
-        }
-        IPPart[index] = 0;
-        portPart[0] = 0;
-        if (str[index] && str[index + 1])
-        {
-            index++;
-            int portIndex;
-            for (portIndex = 0; portIndex < 10 && str[index] && index < 22 + 10; index++, portIndex++)
+            if (ipStr.front() == '[')
             {
-                if (str[index] < '0' || str[index] > '9')
-                    break;
-
-                portPart[portIndex] = str[index];
+                size_t closeBracket = ipStr.find(']');
+                if (closeBracket != std::string::npos)
+                {
+                    std::string tempIp = ipStr.substr(1, closeBracket - 1);
+                    size_t delimPos = ipStr.find(portDelineator, closeBracket);
+                    if (delimPos != std::string::npos && delimPos + 1 < ipStr.size())
+                    {
+                        portStr = ipStr.substr(delimPos + 1);
+                    }
+                    ipStr = tempIp;
+                }
             }
-            portPart[portIndex] = 0;
         }
-
-        if (IPPart[0])
-            address.addr4.sin_addr.s_addr = inet_addr__(IPPart);
-
-        if (portPart[0])
+        else
         {
-            address.addr4.sin_port = htons((unsigned short) atoi(portPart));
-            debugPort = ntohs(address.addr4.sin_port);
+            size_t delimPos = ipStr.find(portDelineator);
+            if (delimPos != std::string::npos)
+            {
+                portStr = ipStr.substr(delimPos + 1);
+                ipStr = ipStr.substr(0, delimPos);
+            }
         }
-        //#endif
+
+        if (!ipStr.empty())
+        {
+            if (inet_pton(AF_INET6, ipStr.c_str(), &address.addr6.sin6_addr) <= 0)
+            {
+                *this = UNASSIGNED_SYSTEM_ADDRESS;
+                return false;
+            }
+            address.addr6.sin6_family = AF_INET6;
+        }
+
+        if (!portStr.empty())
+        {
+            address.addr6.sin6_port = htons((unsigned short)atoi(portStr.c_str()));
+            debugPort = ntohs(address.addr6.sin6_port);
+        }
     }
     return true;
 }
