@@ -374,17 +374,17 @@ void SystemAddress::ToString(bool writePort, char *dest, char portDelineator) co
 
 SystemAddress::SystemAddress()
 {
-    address.addr4.sin_family = AF_INET;
+    address.addr4.sin_family = AF_INET6; // @TODO
     // used for operator ==
     memset(&address, 0, sizeof(address));
-    address.addr4.sin_family = AF_INET;
+    address.addr4.sin_family = AF_INET6; // @TODO
     systemIndex = (SystemIndex) -1;
     debugPort = 0;
 }
 
 SystemAddress::SystemAddress(const char *str)
 {
-    address.addr4.sin_family = AF_INET;
+    address.addr4.sin_family = AF_INET6; // @TODO
     SetPortHostOrder(0);
     FromString(str);
     systemIndex = (SystemIndex) -1;
@@ -392,7 +392,7 @@ SystemAddress::SystemAddress(const char *str)
 
 SystemAddress::SystemAddress(const char *str, unsigned short port)
 {
-    address.addr4.sin_family = AF_INET;
+    address.addr4.sin_family = AF_INET6; // @TODO
     FromStringExplicitPort(str, port);
     systemIndex = (SystemIndex) -1;
 }
@@ -442,7 +442,7 @@ bool SystemAddress::SetBinaryAddress(const char *str, char portDelineator)
         if (strncasecmp(str, "localhost", 9) == 0)
 #endif
         {
-            address.addr4.sin_addr.s_addr = inet_addr__("127.0.0.1");
+            address.addr4.sin_addr.s_addr = inet_addr__("127.0.0.1"); // @TODO ::1?
 
             if (str[9])
                 SetPortHostOrder((unsigned short) atoi(str + 9));
@@ -518,7 +518,7 @@ bool SystemAddress::FromString(const char *str, char portDelineator, int ipVersi
     if (str == nullptr)
     {
         memset(&address, 0, sizeof(address));
-        address.addr4.sin_family = AF_INET;
+        address.addr4.sin_family = AF_INET6; // @TODO
         return true;
     }
     char ipPart[INET6_ADDRSTRLEN];
