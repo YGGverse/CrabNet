@@ -267,8 +267,10 @@ RNS2BindResult RNS2_Berkley::BindSharedIPV4And6(RNS2_BerkleyBindParameters *bind
         rns2Socket = socket__(aip->ai_family, aip->ai_socktype, aip->ai_protocol);
 
         if (rns2Socket == -1)
+        {
             closesocket__(rns2Socket);
             return BR_FAILED_TO_BIND_SOCKET;
+        }
 
         int v6only = 1;
         if (setsockopt__(rns2Socket, IPPROTO_IPV6, IPV6_V6ONLY,
