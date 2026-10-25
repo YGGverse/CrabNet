@@ -4,7 +4,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -267,7 +267,16 @@ RNS2BindResult RNS2_Berkley::BindSharedIPV4And6(RNS2_BerkleyBindParameters *bind
         rns2Socket = socket__(aip->ai_family, aip->ai_socktype, aip->ai_protocol);
 
         if (rns2Socket == -1)
+            closesocket__(rns2Socket);
             return BR_FAILED_TO_BIND_SOCKET;
+
+        int v6only = 1;
+        if (setsockopt__(rns2Socket, IPPROTO_IPV6, IPV6_V6ONLY,
+                        (char*)&v6only, sizeof(v6only)) != 0)
+        {
+            closesocket__(rns2Socket);
+            return BR_FAILED_TO_BIND_SOCKET;
+        }
 
         ret = bind__(rns2Socket, aip->ai_addr, (int) aip->ai_addrlen );
         if (ret>=0)
