@@ -4,7 +4,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
+ *  LICENSE file in the root directory of this source tree. An additional grant 
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -111,12 +111,10 @@ SocketDescriptor::SocketDescriptor(unsigned short _port, const char *_hostAddres
 #endif
     remotePortRakNetWasStartedOn_PS3_PSP2 = 0;
     port = _port;
-
-    if (_hostAddress == 0 || _hostAddress[0] == 0 || strcmp(_hostAddress, "::") == 0)
-        hostAddress[0] = 0;
-    else
+    if (_hostAddress)
         strcpy(hostAddress, _hostAddress);
-
+    else
+        hostAddress[0] = 0;
     extraSocketOptions = 0;
     socketFamily = AF_INET6; // @TODO
 }
