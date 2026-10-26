@@ -103,7 +103,7 @@ namespace sphynx {
 				header byte, which I don't consider worthwhile...
 
 		------------- ACK-ID Field (24 bits) ------------
-		 0 1 2 3 4 5 6 7 8 9 a b c d e f 0 1 2 3 4 5 6 7 
+		 0 1 2 3 4 5 6 7 8 9 a b c d e f 0 1 2 3 4 5 6 7
 		<-- LSB --------------------------------- MSB -->
 		| S | IDA (5) |C|   IDB (7)   |C|  IDC (8)      |
 		-------------------------------------------------
@@ -142,7 +142,7 @@ namespace sphynx {
 	Negative acknowledgment can be inferred from the holes in the RANGEs.
 
 	------------ ROLLUP Field (24 bits) -------------
-	 0 1 2 3 4 5 6 7 8 9 a b c d e f 0 1 2 3 4 5 6 7 
+	 0 1 2 3 4 5 6 7 8 9 a b c d e f 0 1 2 3 4 5 6 7
 	<-- LSB --------------------------------- MSB -->
 	|1| S | IDA (5) |    IDB (8)    |    IDC (8)    |
 	-------------------------------------------------
@@ -154,7 +154,7 @@ namespace sphynx {
 	ROLLUP is always 3 bytes since we cannot tell how far ahead the remote host is now.
 
 	--------- RANGE START Field (24 bits) -----------
-	 0 1 2 3 4 5 6 7 8 9 a b c d e f 0 1 2 3 4 5 6 7 
+	 0 1 2 3 4 5 6 7 8 9 a b c d e f 0 1 2 3 4 5 6 7
 	<-- LSB --------------------------------- MSB -->
 	|0|E| IDA (5) |C|   IDB (7)   |C|    IDC (8)    |
 	-------------------------------------------------
@@ -165,7 +165,7 @@ namespace sphynx {
 	ID: IDC | IDB | IDA (20 bits) + last ack id in message
 
 	---------- RANGE END Field (24 bits) ------------
-	 0 1 2 3 4 5 6 7 8 9 a b c d e f 0 1 2 3 4 5 6 7 
+	 0 1 2 3 4 5 6 7 8 9 a b c d e f 0 1 2 3 4 5 6 7
 	<-- LSB --------------------------------- MSB -->
 	|   IDA (7)   |C|   IDB (7)   |C|    IDC (8)    |
 	-------------------------------------------------
@@ -329,9 +329,9 @@ protected:
 
 	static const int TICK_RATE = 20; // 20 milliseconds
 
-	static const u32 MINIMUM_MTU = 576; // Dialup
-	static const u32 MEDIUM_MTU = 1400; // Highspeed with unexpected overhead, maybe VPN
-	static const u32 MAXIMUM_MTU = 1500; // Highspeed
+	static const u32 MINIMUM_MTU = 1280; // Dialup
+	static const u32 MEDIUM_MTU = 1392; // Highspeed with unexpected overhead, maybe VPN
+	static const u32 MAXIMUM_MTU = 1400; // Highspeed / Mycelium
 
 	static const u32 IPV6_OPTIONS_BYTES = 40; // TODO: Not sure about this
 	static const u32 IPV6_HEADER_BYTES = 40 + IPV6_OPTIONS_BYTES;
