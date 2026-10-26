@@ -29,7 +29,7 @@
 /// \li \em 576. Typical value to connect to dial-up ISPs.
 /// The largest value for an UDP datagram
 
-#define MAXIMUM_MTU_SIZE 1352 // default: 1492
+#define MAXIMUM_MTU_SIZE 1352 // default: 1492 (see also UDP_HEADER_SIZE)
 #define MINIMUM_MTU_SIZE 1280 // default: 400
 
 #endif
