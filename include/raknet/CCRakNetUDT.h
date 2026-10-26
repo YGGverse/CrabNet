@@ -4,7 +4,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -41,7 +41,7 @@ typedef double MicrosecondsPerByte;
 #define RTT_HISTORY_LENGTH 64
 
 /// Sizeof an UDP header in byte
-#define UDP_HEADER_SIZE 28
+#define UDP_HEADER_SIZE 48
 
 #define CC_DEBUG_PRINTF_1(x)
 #define CC_DEBUG_PRINTF_2(x,y)
