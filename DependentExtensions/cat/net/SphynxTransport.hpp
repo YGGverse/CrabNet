@@ -329,9 +329,9 @@ protected:
 
 	static const int TICK_RATE = 20; // 20 milliseconds
 
-	static const u32 MINIMUM_MTU = 1232;
+	static const u32 MINIMUM_MTU = 1280;
 	static const u32 MEDIUM_MTU = 1280;
-	static const u32 MAXIMUM_MTU = 1400; // Highspeed / Mycelium
+	static const u32 MAXIMUM_MTU = 1352; // Mycelium
 
 	static const u32 IPV6_OPTIONS_BYTES = 40; // TODO: Not sure about this
 	static const u32 IPV6_HEADER_BYTES = 40 + IPV6_OPTIONS_BYTES;
