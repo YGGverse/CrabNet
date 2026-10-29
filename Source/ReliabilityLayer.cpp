@@ -4,7 +4,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
@@ -808,7 +808,7 @@ bool ReliabilityLayer::HandleSocketReceiveFromConnectedPlayer(
 //                 {
 //                     // Previously used slot, rather than empty unreliable slot
 //                     printf("%p Ack %i is duplicate\n", this, datagramNumber.val);
-// 
+//
 //                      congestionManager.OnDuplicateAck(timeRead, datagramNumber);
 //                 }
             }
@@ -2722,8 +2722,14 @@ InternalPacket *ReliabilityLayer::CreateInternalPacketFromBitStream(RakNet::BitS
     else
         internalPacket->splitPacketCount = 0;
 
+    // https://github.com/facebookarchive/RakNet/issues/143
+    // https://github.com/exuvo/SLikeNet/commit/15b2d71fc0d6aab752198de322f715fd6adbb241
+    const int maxPacketSize = 1024 * 1024 * 4;
+    const int maxPacketSplit = (maxPacketSize + (MINIMUM_MTU_SIZE - 1)) / MINIMUM_MTU_SIZE;
+
     if (!readSuccess || internalPacket->dataBitLength == 0 || internalPacket->reliability >= NUMBER_OF_RELIABILITIES ||
         internalPacket->orderingChannel >= 32 ||
+        internalPacket->splitPacketCount > maxPacketSplit || // #143
         (hasSplitPacket && (internalPacket->splitPacketIndex >= internalPacket->splitPacketCount)))
     {
         // If this assert hits, encoding is garbage
@@ -3712,7 +3718,7 @@ void ReliabilityLayer::ValidateResendList(void) const
 //     for (unsigned int i=0; i < RESEND_BUFFER_ARRAY_LENGTH; i++)
 //     if (resendBuffer[i])
 //     count1++;
-// 
+//
 //     if (resendLinkedListHead)
 //     {
 //     InternalPacket *internalPacket = resendLinkedListHead;
